@@ -627,10 +627,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596679ce6044ed94c88312e451a2b6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
-  xSize: 50
-  zSize: 50
-  xScale: 0.1
-  yScale: 5
+  xSize: 100
+  zSize: 100
+  xScale: 0.025
+  yScale: 10
   Regen: 0
 --- !u!64 &808705676
 MeshCollider:
