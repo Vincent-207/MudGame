@@ -10,12 +10,7 @@ using UnityEngine.AI;
 
 public class Inventory : MonoBehaviour
 {   
-    /* [Header("Debug")]
-    // DEBUG
-    public ItemSO woodItem, axeItem;
-
-    [SerializeField] InputActionReference debugAddWood, debugAddAxe,  */
-    // non debug
+    
     [SerializeField] InputActionReference DragItem, mousePosition, toggleInventory, pickupItem, selectHotBarItem, dropItem;
     [Header("Item pickup")]
     public float itemPickupRange = 3f;
@@ -40,9 +35,14 @@ public class Inventory : MonoBehaviour
     public float equippedOpacity = 0.9f, normalOpacity = 0.58f;
     public Transform hand;
     private GameObject currentHandItem;
+    // Crafting
+    public List<Recipe> allRecipes, defaultRecipes = new List<Recipe>();
+    public Transform craftingGrid;
+    public GameObject craftingButtonPrefab;
 
     private void Awake()
     {
+        allRecipes = defaultRecipes;
         inventorySlots.AddRange(inventorySlotParent.GetComponentsInChildren<ItemSlot>());
         hotbarSlots.AddRange(hotbarObj.GetComponentsInChildren<ItemSlot>());
         equipmentSlots.AddRange(equipmentSlotParent.GetComponentsInChildren<ItemSlot>());
@@ -50,6 +50,8 @@ public class Inventory : MonoBehaviour
         allSlots.AddRange(inventorySlots);
         allSlots.AddRange(hotbarSlots);
         allSlots.AddRange(equipmentSlots);
+
+        PopulateCraftingGrid();
     }
     // Update is called once per frame
     void OnEnable()
@@ -68,6 +70,19 @@ public class Inventory : MonoBehaviour
         dropItem.action.started += DropItem;
     }
 
+    void OnDisable()
+    {
+        DragItem.action.started -= StartDrag;
+        DragItem.action.canceled -= EndDrag;
+
+        toggleInventory.action.started -= ToggleInventory;
+
+        pickupItem.action.started -= Pickup;
+        
+        selectHotBarItem.action.started -=  SelectHotBarItem;
+        dropItem.action.started -= DropItem;
+    }
+
     void Update()
     {
         UpdateDragItemPosition();
@@ -80,6 +95,10 @@ public class Inventory : MonoBehaviour
         Cursor.lockState = isOpeningInventory ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = isOpeningInventory ? true : false;
         PlayerMovement.doRotation = !isOpeningInventory;
+        if(!isOpeningInventory)
+        {
+            
+        }
         // TODO: disable player turning.
     }
 
@@ -113,6 +132,7 @@ public class Inventory : MonoBehaviour
                     Debug.Log("remaining:  " + remaining);
                     if(remaining <= 0)
                     {
+                        PopulateCraftingGrid();
                         return;
                     }
                 }
@@ -128,7 +148,10 @@ public class Inventory : MonoBehaviour
                 slot.SetItem(itemToAdd, amountToPlace);
                 remaining -= amountToPlace;
                 if(remaining <= 0)
+                {
+                    PopulateCraftingGrid();
                     return;
+                }
             }
         }
 
@@ -344,6 +367,7 @@ public class Inventory : MonoBehaviour
 
         equippedSlot.ClearSlot();
         EquipHandItem();
+        PopulateCraftingGrid();
     }
 
     private void EquipHandItem()
@@ -364,5 +388,81 @@ public class Inventory : MonoBehaviour
         currentHandItem.transform.localPosition = Vector3.zero;
         currentHandItem.transform.localRotation = Quaternion.identity;
 
+    }
+
+    public void PopulateCraftingGrid()
+    {
+        for(int i = craftingGrid.childCount - 1; i >= 0; i--)
+        {
+            Destroy(craftingGrid.GetChild(i).gameObject);
+        }
+
+        foreach(Recipe recipe in allRecipes)
+        {
+            GameObject btnObj = Instantiate(craftingButtonPrefab, craftingGrid);
+            Image img = btnObj.transform.GetChild(0).GetComponent<Image>();
+            img.sprite = recipe.result.Icon;
+
+            Button btn = btnObj.GetComponent<Button>();
+
+            btn.interactable = CanCraft(recipe);
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => Craft(recipe));
+        }
+    }
+
+    public void Craft(Recipe recipe)
+    {
+        if(!CanCraft(recipe))
+        {
+            return;
+        }
+
+        ConsumeIngredients(recipe);
+        AddItem(recipe.result, recipe.resultAmount);
+
+        PopulateCraftingGrid();
+    }
+
+    private void ConsumeIngredients(Recipe recipe)
+    {
+        foreach(Ingredient ingredient in recipe.ingredients)
+        {
+            int remaining = ingredient.amount;
+            foreach(ItemSlot slot in allSlots)
+            {
+                if(!slot.HasItem()) continue;
+                if(slot.GetItem() != ingredient.item) continue;
+
+                int take = Mathf.Min(slot.GetAmount(), remaining);
+                slot.SetItem(slot.GetItem(), slot.GetAmount() - take);
+                if(slot.GetAmount() <= 0)
+                {
+                    slot.ClearSlot();
+                }
+
+                remaining -= take;
+                if(remaining <= 0) break;
+            }
+        }
+    }
+
+    public bool CanCraft(Recipe recipe)
+    {
+        foreach(Ingredient ingredient in recipe.ingredients)
+        {
+            int totalFound = 0;
+            foreach(ItemSlot slot in allSlots)
+            {
+                if(slot.HasItem() && slot.GetItem() == ingredient.item)
+                {
+                    totalFound += slot.GetAmount();
+                }
+            }
+
+            if(totalFound < ingredient.amount) return false;
+        }
+
+        return true;
     }
 }
