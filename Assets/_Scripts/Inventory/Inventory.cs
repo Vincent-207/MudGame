@@ -35,8 +35,10 @@ public class Inventory : MonoBehaviour
 
     // Equiping
 
-    int equipedHotbarIndex = 0; // 0-5
+    int equippedHotbarIndex = 0; // 0-5
     public float equippedOpacity = 0.9f, normalOpacity = 0.58f;
+    public Transform hand;
+    private GameObject currentHandItem;
 
     private void Awake()
     {
@@ -87,8 +89,6 @@ public class Inventory : MonoBehaviour
     {
         AddItem(woodItem, 3);
     } */
-
-    
 
     public void AddItem(ItemSO itemToAdd, int amount)
     {
@@ -244,6 +244,8 @@ public class Inventory : MonoBehaviour
                 Destroy(item.gameObject);
             }
         }
+
+        EquipHandItem();
     }
 
     private void DetectLookedAtItem()
@@ -281,7 +283,7 @@ public class Inventory : MonoBehaviour
             Image icon = hotbarSlots[i].GetComponent<Image>();
             if(icon != null)
             {
-                icon.color = (i == equipedHotbarIndex) ? new Color(1, 1, 1, equippedOpacity) : new Color(1, 1, 1, normalOpacity);
+                icon.color = (i == equippedHotbarIndex) ? new Color(1, 1, 1, equippedOpacity) : new Color(1, 1, 1, normalOpacity);
             }
         }
     }
@@ -289,15 +291,16 @@ public class Inventory : MonoBehaviour
     private void SelectHotBarItem(InputAction.CallbackContext callbackContext)
     {
         
-        equipedHotbarIndex = (int) callbackContext.action.ReadValue<float>() - 1;
+        equippedHotbarIndex = (int) callbackContext.action.ReadValue<float>() - 1;
         UpdateHotbarOpacity();
+        EquipHandItem();
 
     }
 
     private void DropItem(InputAction.CallbackContext callbackContext)
     {
         
-        ItemSlot equippedSlot = hotbarSlots[equipedHotbarIndex];
+        ItemSlot equippedSlot = hotbarSlots[equippedHotbarIndex];
 
         if(!equippedSlot.HasItem()) return;
 
@@ -313,5 +316,26 @@ public class Inventory : MonoBehaviour
         item.amount = equippedSlot.GetAmount();
 
         equippedSlot.ClearSlot();
+        EquipHandItem();
+    }
+
+    private void EquipHandItem()
+    {
+        if(currentHandItem != null)
+        {
+            Destroy(currentHandItem);
+        }
+
+        ItemSlot equippedSlot = hotbarSlots[equippedHotbarIndex];
+
+        if(!equippedSlot.HasItem()) return;
+
+        ItemSO item = equippedSlot.GetItem();
+        if(item.handItemPrefab == null) return;
+
+        currentHandItem = Instantiate(item.handItemPrefab, hand);
+        currentHandItem.transform.localPosition = Vector3.zero;
+        currentHandItem.transform.localRotation = Quaternion.identity;
+
     }
 }
