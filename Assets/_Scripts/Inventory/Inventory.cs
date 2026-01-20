@@ -24,9 +24,10 @@ public class Inventory : MonoBehaviour
     public Material highlightMaterial;
     private Material originialMaterial;
     private Renderer lookedAtRenderer;
-    public GameObject hotbarObj, inventorySlotParent, container;
+    public GameObject hotbarObj, inventorySlotParent, equipmentSlotParent, container;
     private List<ItemSlot> inventorySlots = new List<ItemSlot>();
     private List<ItemSlot> hotbarSlots = new List<ItemSlot>();
+    private List<ItemSlot> equipmentSlots = new List<ItemSlot>();
     private List<ItemSlot> allSlots = new List<ItemSlot>();
     // Dragging
     public Image dragIcon;
@@ -44,9 +45,11 @@ public class Inventory : MonoBehaviour
     {
         inventorySlots.AddRange(inventorySlotParent.GetComponentsInChildren<ItemSlot>());
         hotbarSlots.AddRange(hotbarObj.GetComponentsInChildren<ItemSlot>());
-        
+        equipmentSlots.AddRange(equipmentSlotParent.GetComponentsInChildren<ItemSlot>());
+
         allSlots.AddRange(inventorySlots);
         allSlots.AddRange(hotbarSlots);
+        allSlots.AddRange(equipmentSlots);
     }
     // Update is called once per frame
     void OnEnable()
@@ -169,7 +172,12 @@ public class Inventory : MonoBehaviour
 
     private void HandleDrop(ItemSlot from, ItemSlot to)
     {
+        // WARNING:  Assumes from has a none null item when calling GetItem
         if(from == to) return;
+        // Check swaping
+        
+        bool fromItemMatchesToSlot = from.GetItem().slotTag == to.slotTag || to.slotTag == SlotTag.None;
+        bool canPlace = fromItemMatchesToSlot;
 
         // stacking
         if(to.HasItem() && to.GetItem() == from.GetItem())
@@ -195,18 +203,37 @@ public class Inventory : MonoBehaviour
         // different items
         if(to.HasItem())
         {
-            ItemSO tempItem = to.GetItem();
-            int tempAmount = to.GetAmount();
+            bool toItemMatchesFromSlot = to.GetItem().slotTag == from.slotTag || from.slotTag == SlotTag.None;
+            bool canSwap = (toItemMatchesFromSlot && fromItemMatchesToSlot) || from.slotTag == to.slotTag;
+            if(canSwap)
+            {
+                SwapItems(from, to);
+            }
 
-            to.SetItem(from.GetItem(), from.GetAmount());
-            from.SetItem(tempItem, tempAmount);
             return;
         }
 
         // empty slot
+        if(canPlace)
+        {
+            to.SetItem(from.GetItem(), from.GetAmount());
+            from.ClearSlot();
+            return;
+        }
+        else
+        {
+            Debug.Log("can't place");
+        }
+
+    }
+
+    void SwapItems(ItemSlot from, ItemSlot to)
+    {
+        ItemSO tempItem = to.GetItem();
+        int tempAmount = to.GetAmount();
 
         to.SetItem(from.GetItem(), from.GetAmount());
-        from.ClearSlot();
+        from.SetItem(tempItem, tempAmount);
     }
 
     private void UpdateDragItemPosition()
@@ -232,14 +259,14 @@ public class Inventory : MonoBehaviour
 
     private void Pickup(InputAction.CallbackContext callbackContext)
     {
-        Debug.Log("picking up");
+        // Debug.Log("picking up");
         if(lookedAtItem != null)
         {
-            Debug.Log("not null");
+            // Debug.Log("not null");
             Item item = lookedAtRenderer.GetComponent<Item>();
             if(item != null)
             {
-                    Debug.Log("item not null");
+                // Debug.Log("item not null");
                 AddItem(item.item, item.amount);
                 Destroy(item.gameObject);
             }

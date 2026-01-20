@@ -11,7 +11,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private int itemAmount;
     private Image iconImage;
     private TextMeshProUGUI amountText;
-
+    public SlotTag slotTag;
     private void Awake()
     {
         iconImage = transform.GetChild(0).GetComponent<Image>();
