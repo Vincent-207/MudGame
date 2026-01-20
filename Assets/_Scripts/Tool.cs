@@ -1,16 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Weapon : MonoBehaviour
+[Serializable]
+public enum ToolType
 {
-    [SerializeField]
-    bool isAttacking;
+    None,
+    Ore,
+    Wood
+}
+public class Tool : MonoBehaviour
+{
+    
+    public ToolType toolType;
+    public bool isAttacking;
     [SerializeField] InputActionReference attack;
     public float attackDuration, damage;
     List<IDamageable> attackedDuringSwing = new List<IDamageable>();
+    public int toolLevel;
 
     void OnEnable()
     {
@@ -28,7 +38,7 @@ public class Weapon : MonoBehaviour
             Debug.Log("Weapon entered: " + collider.name);
             IDamageable damageable = collider.GetComponent<IDamageable>();
             if(damageable == null || attackedDuringSwing.Contains(damageable)) return;
-            damageable.DoDamage(damage);
+            damageable.DoDamage(damage, toolType, toolLevel);
             attackedDuringSwing.Add(damageable);
         }
     }
@@ -57,5 +67,5 @@ public class Weapon : MonoBehaviour
 
 public interface IDamageable
 {
-    public void DoDamage(float damage);
+    public void DoDamage(float damage, ToolType toolType, int toolLevel);
 }

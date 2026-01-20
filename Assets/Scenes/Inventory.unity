@@ -475,6 +475,8 @@ MonoBehaviour:
     amount: 2
   - item: {fileID: 11400000, guid: 88fd46c99ea60874e92b3cf3394f94e0, type: 2}
     amount: 1
+  - item: {fileID: 11400000, guid: c1b383d1f76d17b4981e2507f2852428, type: 2}
+    amount: 1
   inventory: {fileID: 2085346141}
 --- !u!4 &221312744
 Transform:
@@ -3651,7 +3653,7 @@ GameObject:
   - component: {fileID: 1758339746}
   - component: {fileID: 1758339747}
   m_Layer: 5
-  m_Name: Armour slots
+  m_Name: Armor slots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

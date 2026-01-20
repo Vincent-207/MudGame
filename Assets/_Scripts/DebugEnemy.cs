@@ -14,7 +14,7 @@ public class DebugEnemy : MonoBehaviour, IDamageable
     {
         healthText.text = health.ToString();
     }
-    public void DoDamage(float damage)
+    public void DoDamage(float damage, ToolType toolType, int toolLevel)
     {
         health -= damage;
         UpdateSigns();

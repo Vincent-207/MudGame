@@ -20,4 +20,5 @@ public class ItemSO : ScriptableObject
     public Sprite Icon;
     public int maxStackSize;
     public GameObject itemPrefab, handItemPrefab;
+
 }
