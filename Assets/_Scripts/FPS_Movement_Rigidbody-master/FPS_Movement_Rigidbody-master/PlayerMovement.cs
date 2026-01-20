@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour {
     private float sensitivity = 50f;
     [SerializeField]
     private float sensMultiplier = 1f;
-    
+    public static bool doRotation = true;
     //Movement
     public float moveSpeed = 4500;
     public float maxSpeed = 20;
@@ -82,7 +82,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Update() {
         MyInput();
-        Look();
+        if(doRotation)
+            Look();
     }
 
     void StopCrouch(InputAction.CallbackContext callback)

@@ -32,6 +32,10 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     void UpdateSlot()
     {
+        if(iconImage == null)
+        {
+            Awake();
+        }
         if(heldItem != null)
         {
             iconImage.enabled = true;

@@ -4,22 +4,40 @@ using System;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEditor;
+using System.ComponentModel;
+using System.Buffers.Text;
+using UnityEngine.AI;
 
 public class Inventory : MonoBehaviour
 {   
+    /* [Header("Debug")]
     // DEBUG
     public ItemSO woodItem, axeItem;
 
-    [SerializeField] InputActionReference debugAddWood, debugAddAxe, 
+    [SerializeField] InputActionReference debugAddWood, debugAddAxe,  */
     // non debug
-    pickupItem, mousePosition;
-    public GameObject hotbarObj, inventorySlotParent;
-    public Image dragIcon;
+    [SerializeField] InputActionReference DragItem, mousePosition, toggleInventory, pickupItem, selectHotBarItem, dropItem;
+    [Header("Item pickup")]
+    public float itemPickupRange = 3f;
+    [SerializeField] LayerMask itemLayerMask;
+    private Item lookedAtItem = null;
+    public Material highlightMaterial;
+    private Material originialMaterial;
+    private Renderer lookedAtRenderer;
+    public GameObject hotbarObj, inventorySlotParent, container;
     private List<ItemSlot> inventorySlots = new List<ItemSlot>();
     private List<ItemSlot> hotbarSlots = new List<ItemSlot>();
     private List<ItemSlot> allSlots = new List<ItemSlot>();
+    // Dragging
+    public Image dragIcon;
     private ItemSlot draggedSlot = null;
     private bool isDragging = false;
+
+    // Equiping
+
+    int equipedHotbarIndex = 0; // 0-5
+    public float equippedOpacity = 0.9f, normalOpacity = 0.58f;
+
     private void Awake()
     {
         inventorySlots.AddRange(inventorySlotParent.GetComponentsInChildren<ItemSlot>());
@@ -31,13 +49,36 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void OnEnable()
     {
-        debugAddWood.action.started += AddWood;
-        debugAddAxe.action.started += AddAxe;
-        pickupItem.action.started += StartDrag;
-        pickupItem.action.canceled += EndDrag;
+        // debugAddWood.action.started += AddWood;
+        // debugAddAxe.action.started += AddAxe;
+        
+        DragItem.action.started += StartDrag;
+        DragItem.action.canceled += EndDrag;
+
+        toggleInventory.action.started += ToggleInventory;
+
+        pickupItem.action.started += Pickup;
+        
+        selectHotBarItem.action.started +=  SelectHotBarItem;
+        dropItem.action.started += DropItem;
     }
 
-    void AddAxe(InputAction.CallbackContext callbackContext)
+    void Update()
+    {
+        UpdateDragItemPosition();
+        DetectLookedAtItem();
+    }
+    private void ToggleInventory(InputAction.CallbackContext callbackContext)
+    {
+        bool isOpeningInventory = !container.activeInHierarchy;
+        container.SetActive(isOpeningInventory);
+        Cursor.lockState = isOpeningInventory ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isOpeningInventory ? true : false;
+        PlayerMovement.doRotation = !isOpeningInventory;
+        // TODO: disable player turning.
+    }
+
+    /* void AddAxe(InputAction.CallbackContext callbackContext)
     {
         AddItem(axeItem, 1);
     }
@@ -45,12 +86,9 @@ public class Inventory : MonoBehaviour
     void AddWood(InputAction.CallbackContext callbackContext)
     {
         AddItem(woodItem, 3);
-    }
+    } */
 
-    void Update()
-    {
-        UpdateDragItemPosition();
-    }
+    
 
     public void AddItem(ItemSO itemToAdd, int amount)
     {
@@ -178,7 +216,6 @@ public class Inventory : MonoBehaviour
             dragIcon.transform.position = mousePosition.action.ReadValue<Vector2>();
         }
     }
-
     private ItemSlot GetHoveredSlot()
     {
         foreach(ItemSlot itemSlot in allSlots)
@@ -191,5 +228,90 @@ public class Inventory : MonoBehaviour
 
         // Debug.LogWarning("Couldn't find hovered slot.");
         return null;
+    }
+
+    private void Pickup(InputAction.CallbackContext callbackContext)
+    {
+        Debug.Log("picking up");
+        if(lookedAtItem != null)
+        {
+            Debug.Log("not null");
+            Item item = lookedAtRenderer.GetComponent<Item>();
+            if(item != null)
+            {
+                    Debug.Log("item not null");
+                AddItem(item.item, item.amount);
+                Destroy(item.gameObject);
+            }
+        }
+    }
+
+    private void DetectLookedAtItem()
+    {
+        if(lookedAtRenderer != null)
+        {
+            lookedAtRenderer.material = originialMaterial;
+            lookedAtRenderer = null;
+            originialMaterial = null;
+        }
+
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+
+        if(Physics.Raycast(ray, out RaycastHit hit, itemPickupRange, itemLayerMask))
+        {
+            Item item = hit.collider.GetComponent<Item>();
+            if(item != null)
+            {
+                Renderer rend = item.GetComponent<Renderer>();
+                if(rend != null)
+                {
+                    originialMaterial = rend.material;
+                    rend.material = highlightMaterial;
+                    lookedAtRenderer = rend;
+                    lookedAtItem = item;
+                }
+            }
+        }
+    }
+
+    private void UpdateHotbarOpacity()
+    {
+        for(int i = 0; i < hotbarSlots.Count; i++)
+        {
+            Image icon = hotbarSlots[i].GetComponent<Image>();
+            if(icon != null)
+            {
+                icon.color = (i == equipedHotbarIndex) ? new Color(1, 1, 1, equippedOpacity) : new Color(1, 1, 1, normalOpacity);
+            }
+        }
+    }
+
+    private void SelectHotBarItem(InputAction.CallbackContext callbackContext)
+    {
+        
+        equipedHotbarIndex = (int) callbackContext.action.ReadValue<float>() - 1;
+        UpdateHotbarOpacity();
+
+    }
+
+    private void DropItem(InputAction.CallbackContext callbackContext)
+    {
+        
+        ItemSlot equippedSlot = hotbarSlots[equipedHotbarIndex];
+
+        if(!equippedSlot.HasItem()) return;
+
+        ItemSO itemSO = equippedSlot.GetItem();
+        GameObject prefab = itemSO.itemPrefab;
+
+        if(prefab == null) return;
+
+        GameObject dropped = Instantiate(prefab, Camera.main.transform.position + Camera.main.transform.forward, Quaternion.identity);
+
+        Item item = dropped.GetComponent<Item>();
+        item.item = itemSO;
+        item.amount = equippedSlot.GetAmount();
+
+        equippedSlot.ClearSlot();
     }
 }
