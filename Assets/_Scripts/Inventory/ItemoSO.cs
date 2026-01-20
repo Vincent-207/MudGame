@@ -1,0 +1,9 @@
+using UnityEngine;
+[CreateAssetMenu(fileName = "Item", menuName = "NewItem")]
+public class ItemSO : ScriptableObject
+{
+    public string itemName;
+    public Sprite Icon;
+    public int maxStackSize;
+    public GameObject itemPrefab, handItemPrefab;
+}
