@@ -10,6 +10,7 @@ public class Craftingmenu : MonoBehaviour, IInteractable
     bool menuIsOpen = false;
     public void Interact()
     {
+        Debug.Log("Interacting");
         OpenMenu();
     }
     public void OpenMenu()
