@@ -91,17 +91,27 @@ public class Inventory : MonoBehaviour
     private void ToggleInventory(InputAction.CallbackContext callbackContext)
     {
         bool isOpeningInventory = !container.activeInHierarchy;
-        container.SetActive(isOpeningInventory);
-        Cursor.lockState = isOpeningInventory ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = isOpeningInventory ? true : false;
-        PlayerMovement.doRotation = !isOpeningInventory;
-        if(!isOpeningInventory)
-        {
-            
-        }
+        if(isOpeningInventory) OpenInventory();
+        else CloseInventory();
         // TODO: disable player turning.
     }
 
+    void CloseInventory()
+    {
+        container.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        PlayerMovement.doRotation = true;
+    }
+
+    void OpenInventory()
+    {
+        container.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        PlayerMovement.doRotation = false;
+        
+    }
     /* void AddAxe(InputAction.CallbackContext callbackContext)
     {
         AddItem(axeItem, 1);
