@@ -7,6 +7,8 @@ using UnityEditor;
 using System.ComponentModel;
 using System.Buffers.Text;
 using UnityEngine.AI;
+using UnityEngine.Events;
+using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {   
@@ -28,6 +30,8 @@ public class Inventory : MonoBehaviour
     public Image dragIcon;
     private ItemSlot draggedSlot = null;
     private bool isDragging = false;
+    public UnityEvent closeInventory = new UnityEvent(), openInventory = new UnityEvent();
+
 
     // Equiping
 
@@ -102,15 +106,16 @@ public class Inventory : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         PlayerMovement.doRotation = true;
+        closeInventory.Invoke();
     }
 
-    void OpenInventory()
+    public void OpenInventory()
     {
         container.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         PlayerMovement.doRotation = false;
-        
+        openInventory.Invoke();
     }
     /* void AddAxe(InputAction.CallbackContext callbackContext)
     {

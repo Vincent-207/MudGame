@@ -37,7 +37,15 @@ public class ResourceNode : MonoBehaviour, IDamageable
 
     void Die()
     {
-        Instantiate(damageable.droppedItem, transform.position, transform.rotation);
+        DropItems();
         Destroy(gameObject);
+    }
+
+    void DropItems()
+    {
+        int dropAmount = Random.Range(damageable.itemDrop.minDrop, damageable.itemDrop.maxDrop);
+        GameObject drop = Instantiate(damageable.itemDrop.droppedItem, transform.position, Quaternion.identity);
+        drop.GetComponent<Item>().amount = dropAmount;
+        
     }
 }

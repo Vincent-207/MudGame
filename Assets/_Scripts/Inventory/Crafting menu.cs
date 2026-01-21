@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Craftingmenu : MonoBehaviour, IInteractable
+public class Craftingmenu : MonoBehaviour
 {
     public List<Recipe> menuRecipes = new List<Recipe>();
     public Transform craftingGrid;
@@ -29,5 +29,5 @@ public class Craftingmenu : MonoBehaviour, IInteractable
 
 public interface IInteractable
 {
-    public void Interact();
+    public void Interact(float distance);
 }
