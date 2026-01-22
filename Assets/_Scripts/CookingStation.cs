@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class CookingStation : MonoBehaviour
+public class CookingStation : MonoBehaviour, IInteractable
 {
     [SerializeField]
     List<ItemSlot> fuelSlots = new List<ItemSlot>(), ingrediantSlots = new List<ItemSlot>(),
     outputSlots = new List<ItemSlot>(), allSlots = new List<ItemSlot>();
-    Transform outputSlotHolder, fuelSlotHolder, ingrediantSlotHolder;
-    List<Recipe> allRecipes = new List<Recipe>();
-    float currentFuelTime = 0;
+    [SerializeField] Transform outputSlotHolder, fuelSlotHolder, ingrediantSlotHolder;
+    public List<Recipe> allRecipes = new List<Recipe>();
+    [SerializeField] float currentFuelTime = 0;
+    bool isMenuOpen = false;
+    [SerializeField] CanvasGroup MenuCanvasGroup;
+    [SerializeField] Inventory inventory;
     void Awake()
     {
         fuelSlots.AddRange(fuelSlotHolder.GetComponentsInChildren<ItemSlot>());
@@ -33,14 +37,24 @@ public class CookingStation : MonoBehaviour
 
     void UseFuel()
     {
+        // Remove a fuel from fuel slots
+        foreach(ItemSlot itemSlot in fuelSlots)
+        {
+            if(itemSlot.HasItem())
+            {
+                itemSlot.RemoveAmount(1);
+                break;
+            }
+        }
         StartCoroutine(ConsumeFuel());
     }
 
     IEnumerator ConsumeFuel()
     {
-        float time = 5f;
-
-        yield return new WaitForSeconds(time);
+        currentFuelTime = 5f;
+        Debug.LogWarning("Starting use!");
+        yield return new WaitForSeconds(currentFuelTime);
+        currentFuelTime = 0;
         // TODO
         Craft();
     }
@@ -56,35 +70,25 @@ public class CookingStation : MonoBehaviour
             }
             else
             {
-                Debug.Log("Output can't fit! not crafting.");
+                // Debug.Log("Output can't fit! not crafting.");
             }
         }
-        else Debug.Log("Can't find craftable recipe");
+        // else Debug.Log("Can't find craftable recipe");
 
     }
 
     void Craft(Recipe recipe)
     {
         Debug.Log("Crafting: " + recipe.name);
+        
+        AddItem(recipe.result, recipe.resultAmount);
+        ConsumeIngredients(recipe, ingrediantSlots);
+        
     }
 
-    bool CanUseFuel()
+    void AddItem(ItemSO itemToAdd, int amount)
     {
-        if(currentFuelTime > 0) return false;
-        if(IsEmptyCollection(fuelSlots)) return false;
-        Recipe recipeToCraft = GetCraftableRecipe();
-        if(recipeToCraft == null) return false;
-        if(OutputCanFit(recipeToCraft)) return true;
-
-        return true;
-
-      // Fuel section should not let non fuel items be dragged in, so assume it has valid fuel if it contains any items.
-    }
-
-    bool OutputCanFit(Recipe recipe)
-    {
-        int remaining = recipe.resultAmount;
-        ItemSO itemToAdd = recipe.result;
+        int remaining = amount;
         foreach(ItemSlot slot in allSlots)
         {
             if(slot.HasItem() && slot.GetItem() == itemToAdd)
@@ -102,11 +106,13 @@ public class CookingStation : MonoBehaviour
                     Debug.Log("remaining:  " + remaining);
                     if(remaining <= 0)
                     {
-                        return true;
+
+                        return;
                     }
                 }
             }
         }
+
 
         foreach(ItemSlot slot in allSlots)
         {
@@ -114,6 +120,71 @@ public class CookingStation : MonoBehaviour
             {
                 int amountToPlace = Mathf.Min(itemToAdd.maxStackSize, remaining);
                 slot.SetItem(itemToAdd, amountToPlace);
+                remaining -= amountToPlace;
+                if(remaining <= 0)
+                {
+                    return;
+                }
+            }
+        }
+
+
+        if(remaining > 0)
+        {
+            Debug.LogWarning("Inventory is full, could not add " + remaining + " of " + itemToAdd.itemName);
+        }
+    }
+
+    bool CanUseFuel()
+    {
+        // Debug.LogWarning("Checking");
+        if(currentFuelTime > 0) return false;
+        // Debug.Log("No active fuel");
+        if(IsEmptyCollection(fuelSlots)) return false;
+        // Debug.Log("Is empty collection");
+        Recipe recipeToCraft = GetCraftableRecipe();
+        if(recipeToCraft == null) return false;
+        // Debug.Log("Recipe found");
+        if(OutputCanFit(recipeToCraft)) return true;
+        // Debug.Log("Output can't fit");
+
+        return true;
+
+      // Fuel section should not let non fuel items be dragged in, so assume it has valid fuel if it contains any items.
+    }
+
+    bool OutputCanFit(Recipe recipe)
+    {
+        int remaining = recipe.resultAmount;
+        ItemSO itemToAdd = recipe.result;
+        // Add to any not fully filled tiles that have the same item
+        foreach(ItemSlot slot in allSlots)
+        {
+            if(slot.HasItem() && slot.GetItem() == itemToAdd)
+            {
+                int currentAmount = slot.GetAmount();
+                int maxStackSize = itemToAdd.maxStackSize;
+
+                if(currentAmount < maxStackSize)
+                {
+                    int spaceLeft = maxStackSize - currentAmount;
+                    int amountToAdd = Mathf.Min(spaceLeft, remaining);
+                    remaining -= amountToAdd;
+                    Debug.Log("remaining:  " + remaining);
+                    if(remaining <= 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        // Then add to empty tiles. 
+        foreach(ItemSlot slot in allSlots)
+        {
+            if(!slot.HasItem())
+            {
+                int amountToPlace = Mathf.Min(itemToAdd.maxStackSize, remaining);
+                
                 remaining -= amountToPlace;
                 if(remaining <= 0)
                 {
@@ -177,5 +248,59 @@ public class CookingStation : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void ConsumeIngredients(Recipe recipe, List<ItemSlot> ingredientSlots)
+    {
+        foreach(Ingredient ingredient in recipe.ingredients)
+        {
+            RemoveItem(ingredient.item, ingredient.amount, ingredientSlots);
+        }
+    }
+
+    void RemoveItem(ItemSO item, int amount, List<ItemSlot> itemSlots)
+    {
+        int remaining = amount;
+            foreach(ItemSlot slot in itemSlots)
+            {
+                if(!slot.HasItem()) continue;
+                if(slot.GetItem() != item) continue;
+
+                int take = Mathf.Min(slot.GetAmount(), remaining);
+                slot.SetItem(slot.GetItem(), slot.GetAmount() - take);
+                if(slot.GetAmount() <= 0)
+                {
+                    slot.ClearSlot();
+                }
+
+                remaining -= take;
+                if(remaining <= 0) break;
+            }
+    }
+
+    public void Interact(float distance)
+    {
+        ToggleMenu();
+    }
+
+    void ToggleMenu()
+    {
+        if(isMenuOpen)
+        {
+            isMenuOpen = false;
+            MenuCanvasGroup.alpha = 0f;
+            MenuCanvasGroup.interactable = false;
+            MenuCanvasGroup.blocksRaycasts = false;
+            inventory.CloseInventory();
+        }
+        else
+        {
+            isMenuOpen = true;
+            MenuCanvasGroup.alpha = 1f;
+            MenuCanvasGroup.interactable = true;
+            MenuCanvasGroup.blocksRaycasts = true;
+            inventory.OpenInventory();
+            
+        }
     }
 }

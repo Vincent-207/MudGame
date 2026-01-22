@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb35c44503fd1974f955ee33193d3ba1, type: 3}
+  m_Name: Iron Ingot
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  ingredients:
+  - item: {fileID: 11400000, guid: b9a0258b72ef30e44aad12c2d9b7abba, type: 2}
+    amount: 1
+  result: {fileID: 11400000, guid: 88fd46c99ea60874e92b3cf3394f94e0, type: 2}
+  resultAmount: 1

@@ -9,6 +9,8 @@ using System.Buffers.Text;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using Unity.VisualScripting;
+using UnityEngine.EventSystems;
+using UnityEditor.PackageManager;
 
 public class Inventory : MonoBehaviour
 {   
@@ -31,7 +33,7 @@ public class Inventory : MonoBehaviour
     private ItemSlot draggedSlot = null;
     private bool isDragging = false;
     public UnityEvent closeInventory = new UnityEvent(), openInventory = new UnityEvent();
-
+    [SerializeField] private GraphicRaycaster graphicRaycaster;
 
     // Equiping
 
@@ -100,7 +102,7 @@ public class Inventory : MonoBehaviour
         // TODO: disable player turning.
     }
 
-    void CloseInventory()
+    public void CloseInventory()
     {
         container.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
@@ -204,6 +206,7 @@ public class Inventory : MonoBehaviour
 
                 draggedSlot = null;
                 isDragging = false;
+                
             }
         }
     }
@@ -273,7 +276,6 @@ public class Inventory : MonoBehaviour
         to.SetItem(from.GetItem(), from.GetAmount());
         from.SetItem(tempItem, tempAmount);
     }
-
     private void UpdateDragItemPosition()
     {
         if(isDragging)
@@ -290,7 +292,20 @@ public class Inventory : MonoBehaviour
                 return itemSlot;
             }
         }
+        // Not a slot in inventory
+        List<RaycastResult> hits = new List<RaycastResult>();
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = mousePosition.action.ReadValue<Vector2>();
+        graphicRaycaster.Raycast(pointerEventData, hits);
 
+        foreach(RaycastResult result in hits)
+        {
+            ItemSlot itemSlot = result.gameObject.GetComponent<ItemSlot>();
+            if(itemSlot != null)
+            {
+                return itemSlot;
+            }
+        }
         // Debug.LogWarning("Couldn't find hovered slot.");
         return null;
     }
@@ -443,11 +458,17 @@ public class Inventory : MonoBehaviour
     {
         foreach(Ingredient ingredient in recipe.ingredients)
         {
-            int remaining = ingredient.amount;
+            RemoveItem(ingredient.item, ingredient.amount);
+        }
+    }
+
+    void RemoveItem(ItemSO item, int amount)
+    {
+        int remaining = amount;
             foreach(ItemSlot slot in allSlots)
             {
                 if(!slot.HasItem()) continue;
-                if(slot.GetItem() != ingredient.item) continue;
+                if(slot.GetItem() != item) continue;
 
                 int take = Mathf.Min(slot.GetAmount(), remaining);
                 slot.SetItem(slot.GetItem(), slot.GetAmount() - take);
@@ -459,7 +480,6 @@ public class Inventory : MonoBehaviour
                 remaining -= take;
                 if(remaining <= 0) break;
             }
-        }
     }
 
     public bool CanCraft(Recipe recipe)

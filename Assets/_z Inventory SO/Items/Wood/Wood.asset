@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: Assembly-CSharp::ItemoSO
   itemName: Wood
+  slotTag: 5
   Icon: {fileID: 21300000, guid: 60cec6094faec39408fcb9955999fc9b, type: 3}
   maxStackSize: 16
   itemPrefab: {fileID: 6068213369574324245, guid: 5905f1301b9be60438dc9e09effe4f31, type: 3}

@@ -9,7 +9,9 @@ public enum SlotTag
     Head,
     Chest,
     Legs,
-    Feet
+    Feet,
+    Fuel,
+    Smeltable,
 }
 
 [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/ New Item")]

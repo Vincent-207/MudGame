@@ -4,11 +4,11 @@ using UnityEngine;
 public class DebugAddItem : MonoBehaviour
 {
     [SerializeField]
-    ItemSet[] itemSets;
+    DebugItemAddSet[] itemSets;
     public Inventory inventory;
     void Start()
     {
-        foreach(ItemSet itemSet in itemSets)
+        foreach(DebugItemAddSet itemSet in itemSets)
         {
             inventory.AddItem(itemSet.item, itemSet.amount);
         }
@@ -16,7 +16,7 @@ public class DebugAddItem : MonoBehaviour
 }
 
 [Serializable]
-public class ItemSet
+public class DebugItemAddSet
 {
     public ItemSO item;
     public int amount;
