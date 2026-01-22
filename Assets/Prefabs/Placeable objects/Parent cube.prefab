@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3096216783486742501}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Parent cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 7366640851410044690}
   - component: {fileID: 3533877508379881430}
   - component: {fileID: 2289635339620721142}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,3 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b2eef93add70b42964a097f289c210, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  stationMenuPrefab: {fileID: 1355193805013238297, guid: 1275fbc3a57d7b144b4a6644aa05db6e, type: 3}
+  stationMenu: {fileID: 0}
+  inventory: {fileID: 0}
+  maxUseDistance: 7
+  player: {fileID: 0}

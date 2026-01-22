@@ -316,6 +316,7 @@ public class Inventory : MonoBehaviour
         if(lookedAtItem != null)
         {
             // Debug.Log("not null");
+            if(lookedAtRenderer == null) return;
             Item item = lookedAtRenderer.GetComponent<Item>();
             if(item != null)
             {
@@ -374,6 +375,7 @@ public class Inventory : MonoBehaviour
         equippedHotbarIndex = (int) callbackContext.action.ReadValue<float>() - 1;
         UpdateHotbarOpacity();
         EquipHandItem();
+        
 
     }
 
@@ -413,6 +415,16 @@ public class Inventory : MonoBehaviour
 
         ItemSO item = equippedSlot.GetItem();
         if(item.handItemPrefab == null) return;
+        Debug.Log("CHecking if placeable");
+        Debug.Log(String.Format("Tag: {0}", item.slotTag));
+        if(item.slotTag == SlotTag.Placeable)
+        {
+            Debug.Log("Placeable");
+            PlaceableObject placeableObject = item.handItemPrefab.GetComponent<Placeable>().placeableObject;
+            GameManager.Instance.placer.LoadObject(placeableObject.placeablePrefab, placeableObject.previewPrefab);
+            GameManager.Instance.placer.PlacedObject.AddListener(() => RemoveItem(item, 1));
+            return;
+        }
 
         currentHandItem = Instantiate(item.handItemPrefab, hand);
         currentHandItem.transform.localPosition = Vector3.zero;
@@ -465,23 +477,41 @@ public class Inventory : MonoBehaviour
     void RemoveItem(ItemSO item, int amount)
     {
         int remaining = amount;
-            foreach(ItemSlot slot in allSlots)
+        foreach(ItemSlot slot in allSlots)
+        {
+            if(!slot.HasItem()) continue;
+            if(slot.GetItem() != item) continue;
+
+            int take = Mathf.Min(slot.GetAmount(), remaining);
+            slot.SetItem(slot.GetItem(), slot.GetAmount() - take);
+            if(slot.GetAmount() <= 0)
             {
-                if(!slot.HasItem()) continue;
-                if(slot.GetItem() != item) continue;
-
-                int take = Mathf.Min(slot.GetAmount(), remaining);
-                slot.SetItem(slot.GetItem(), slot.GetAmount() - take);
-                if(slot.GetAmount() <= 0)
-                {
-                    slot.ClearSlot();
-                }
-
-                remaining -= take;
-                if(remaining <= 0) break;
+                slot.ClearSlot();
             }
-    }
 
+            remaining -= take;
+            if(remaining <= 0) break;
+        }
+    }
+    void RemoveItem(ItemSO item, int amount, List<ItemSlot> itemSlots)
+    {
+        int remaining = amount;
+        foreach(ItemSlot slot in itemSlots)
+        {
+            if(!slot.HasItem()) continue;
+            if(slot.GetItem() != item) continue;
+
+            int take = Mathf.Min(slot.GetAmount(), remaining);
+            slot.SetItem(slot.GetItem(), slot.GetAmount() - take);
+            if(slot.GetAmount() <= 0)
+            {
+                slot.ClearSlot();
+            }
+
+            remaining -= take;
+            if(remaining <= 0) break;
+        }
+    }
     public bool CanCraft(Recipe recipe)
     {
         foreach(Ingredient ingredient in recipe.ingredients)

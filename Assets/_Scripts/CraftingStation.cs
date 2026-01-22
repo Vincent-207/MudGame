@@ -1,8 +1,10 @@
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 
 public class CraftingStation : MonoBehaviour, IInteractable
 {
+    [SerializeField] GameObject stationMenuPrefab;
     [SerializeField] CanvasGroup stationMenu;
     [SerializeField] Inventory inventory;
     [SerializeField] float maxUseDistance = 7f;
@@ -10,9 +12,12 @@ public class CraftingStation : MonoBehaviour, IInteractable
     bool isOpen = false;
     void Start()
     {
-        // Set default menu for when opened the first time, or else the inventory won't populate with recipes
+        Debug.Log("I'm a thing: " + name);
+        stationMenu = Instantiate(stationMenuPrefab, GameManager.Instance.canvas.transform).GetComponent<CanvasGroup>();
+        if(stationMenu == null) Debug.LogWarning("I'm a bitch! " + name);
+        // Set default menu for when opened the first time, or else the inventory won't populate with recipes 
         stationMenu.transform.GetChild(1).GetComponent<Craftingmenu>().OpenMenu();
-
+        inventory = GameManager.Instance.inventory;
         CloseStation();
         inventory.closeInventory.AddListener(CloseStation);
     }
@@ -23,19 +28,12 @@ public class CraftingStation : MonoBehaviour, IInteractable
         stationMenu.interactable = true;
         stationMenu.blocksRaycasts = true;
         inventory.OpenInventory();
-        if(distance > maxUseDistance)
-        {
-            CloseStation();
-        }
     }
 
     void Update()
     {
-        float distanceToPlayer = (player.position - transform.position).magnitude;
-        if(distanceToPlayer > maxUseDistance)
-        {
-            CloseStation();
-        }
+        
+        
     }
 
     public void CloseStation()

@@ -8,6 +8,11 @@ public class Craftingmenu : MonoBehaviour
     public Transform craftingGrid;
     [SerializeField] Inventory inventory;
     bool menuIsOpen = false;
+
+    void Awake()
+    {
+        inventory = GameManager.Instance.inventory;
+    }
     public void Interact()
     {
         Debug.Log("Interacting");

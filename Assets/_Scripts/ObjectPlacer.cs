@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class ObjectPlacer : MonoBehaviour
@@ -21,8 +22,9 @@ public class ObjectPlacer : MonoBehaviour
     
     private GameObject _previewObject = null;
     private Vector3 _currentPlacementPosition = Vector3.zero;
+    [SerializeField] [Header("Debug info")]
     private bool _inPlacement = false,  _validPreviewState = false;
-    
+    public UnityEvent PlacedObject = new UnityEvent();
 
     public InputActionReference placeInput;
     void OnEnable()
@@ -32,7 +34,7 @@ public class ObjectPlacer : MonoBehaviour
 
     void Start()
     {
-        EnterPlacementMode();
+        // EnterPlacementMode();
     }
     void Update()
     {
@@ -98,8 +100,21 @@ public class ObjectPlacer : MonoBehaviour
     private void ExitPlacementMode()
     {
         Destroy(_previewObject);
+        PlacedObject.Invoke();
+        PlacedObject.RemoveAllListeners();
         _previewObject = null;
         
         _inPlacement = false;
+    }
+
+    public void LoadObject(GameObject placeableObjectPrefab, GameObject previewObjectPrefab)
+    {
+        PlacedObject.RemoveAllListeners();
+
+        Debug.Log("loading!");
+        this.placeableObjectPrefab = placeableObjectPrefab;
+        this.previewObjectPrefab = previewObjectPrefab;
+        
+        EnterPlacementMode();
     }
 }
