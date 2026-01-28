@@ -15,13 +15,24 @@ public enum ToolType
 public class Tool : MonoBehaviour
 {
     
+    // Tool checking
     public ToolType toolType;
-    public bool isAttacking;
-    [SerializeField] InputActionReference attack;
-    public float attackDuration, damage;
-    List<IDamageable> attackedDuringSwing = new List<IDamageable>();
     public int toolLevel;
 
+    // Damaging
+    List<IDamageable> attackedDuringSwing = new List<IDamageable>();
+    public float attackDuration, damage;
+
+    // attack animation
+    [SerializeField] InputActionReference attack;
+    string isAttackingParam = "IsAttacking";
+    public bool isAttacking;
+    Animator animator;
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+        
+    }
     void OnEnable()
     {
         attack.action.started += StartAttack;
@@ -56,11 +67,12 @@ public class Tool : MonoBehaviour
         isAttacking = true;
         while(attackTimer > 0)
         {
-
+            animator.SetBool(isAttackingParam, isAttacking);
             yield return null;
             attackTimer -= Time.deltaTime;
         }
         isAttacking = false;
+        animator.SetBool(isAttackingParam, isAttacking);
         attackedDuringSwing.Clear();
     }
 }

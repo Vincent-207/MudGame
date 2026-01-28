@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class CookingStation : MonoBehaviour, IInteractable
@@ -23,6 +24,14 @@ public class CookingStation : MonoBehaviour, IInteractable
         allSlots.AddRange(fuelSlots);
         allSlots.AddRange(ingrediantSlots);
         allSlots.AddRange(outputSlots);
+        
+    }
+
+    void Start()
+    {
+        // Debug.Log("GM: " + GameManager.Instance.gameObject.name);
+        inventory = GameManager.Instance.inventory;
+        inventory.closeInventory.AddListener(CloseMenu);
     }
 
     void Update()
@@ -33,8 +42,6 @@ public class CookingStation : MonoBehaviour, IInteractable
         }
 
     }
-
-
     void UseFuel()
     {
         // Remove a fuel from fuel slots
@@ -280,26 +287,36 @@ public class CookingStation : MonoBehaviour, IInteractable
 
     public void Interact(float distance)
     {
-        ToggleMenu();
+        OpenMenu();
+    }
+
+    void OpenMenu()
+    {
+        isMenuOpen = true;
+        MenuCanvasGroup.alpha = 1f;
+        MenuCanvasGroup.interactable = true;
+        MenuCanvasGroup.blocksRaycasts = true;
+        inventory.OpenInventory();
+    }
+
+    void CloseMenu()
+    {
+        isMenuOpen = false;
+        MenuCanvasGroup.alpha = 0f;
+        MenuCanvasGroup.interactable = false;
+        MenuCanvasGroup.blocksRaycasts = false;
+        // inventory.CloseInventory();
     }
 
     void ToggleMenu()
     {
         if(isMenuOpen)
         {
-            isMenuOpen = false;
-            MenuCanvasGroup.alpha = 0f;
-            MenuCanvasGroup.interactable = false;
-            MenuCanvasGroup.blocksRaycasts = false;
-            inventory.CloseInventory();
+            CloseMenu();
         }
         else
         {
-            isMenuOpen = true;
-            MenuCanvasGroup.alpha = 1f;
-            MenuCanvasGroup.interactable = true;
-            MenuCanvasGroup.blocksRaycasts = true;
-            inventory.OpenInventory();
+            OpenMenu();
             
         }
     }
