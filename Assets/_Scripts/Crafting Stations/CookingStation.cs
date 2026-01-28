@@ -15,8 +15,23 @@ public class CookingStation : MonoBehaviour, IInteractable
     bool isMenuOpen = false;
     [SerializeField] CanvasGroup MenuCanvasGroup;
     [SerializeField] Inventory inventory;
+    [SerializeField] GameObject cookingMenu, cookingMenuPrefab;
     void Awake()
     {
+        SetupInventorySlots();
+    }
+
+
+
+    void SetupInventorySlots()
+    {
+        cookingMenu = Instantiate(cookingMenuPrefab, GameManager.Instance.inventory.transform);
+        // Ensure other ui elements don't get hidden under.
+        cookingMenu.transform.SetAsFirstSibling();
+        fuelSlotHolder = cookingMenu.transform.GetChild(1);
+        ingrediantSlotHolder = cookingMenu.transform.GetChild(2);
+        outputSlotHolder = cookingMenu.transform.GetChild(3);
+
         fuelSlots.AddRange(fuelSlotHolder.GetComponentsInChildren<ItemSlot>());
         ingrediantSlots.AddRange(ingrediantSlotHolder.GetComponentsInChildren<ItemSlot>());
         outputSlots.AddRange(outputSlotHolder.GetComponentsInChildren<ItemSlot>());
@@ -24,7 +39,9 @@ public class CookingStation : MonoBehaviour, IInteractable
         allSlots.AddRange(fuelSlots);
         allSlots.AddRange(ingrediantSlots);
         allSlots.AddRange(outputSlots);
-        
+
+
+        MenuCanvasGroup = cookingMenu.GetComponent<CanvasGroup>();
     }
 
     void Start()

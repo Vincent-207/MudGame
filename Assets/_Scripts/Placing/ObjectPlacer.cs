@@ -20,7 +20,7 @@ public class ObjectPlacer : MonoBehaviour
     
     
     
-    private GameObject _previewObject = null;
+    [SerializeField] private GameObject _previewObject = null;
     private Vector3 _currentPlacementPosition = Vector3.zero;
     [SerializeField] [Header("Debug info")]
     private bool _inPlacement = false,  _validPreviewState = false;
@@ -101,6 +101,15 @@ public class ObjectPlacer : MonoBehaviour
     {
         Destroy(_previewObject);
         PlacedObject.Invoke();
+        PlacedObject.RemoveAllListeners();
+        _previewObject = null;
+        
+        _inPlacement = false;
+    }
+
+    public void CancelPlacement()
+    {
+        Destroy(_previewObject);
         PlacedObject.RemoveAllListeners();
         _previewObject = null;
         

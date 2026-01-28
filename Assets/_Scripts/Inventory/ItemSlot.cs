@@ -79,6 +79,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         heldItem = null;
         itemAmount = 0;
         UpdateSlot();
+        
     }
 
     public bool HasItem()

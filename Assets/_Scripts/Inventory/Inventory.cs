@@ -40,14 +40,18 @@ public class Inventory : MonoBehaviour
     int equippedHotbarIndex = 0; // 0-5
     public float equippedOpacity = 0.9f, normalOpacity = 0.58f;
     public Transform hand;
+    [SerializeField]
     private GameObject currentHandItem;
     // Crafting
     public List<Recipe> allRecipes, defaultRecipes = new List<Recipe>();
     public Transform craftingGrid, defaultCraftingGrid;
     public GameObject craftingButtonPrefab;
-
+    [SerializeField] InputActionMap playerMovementInput, uiInput;
+    [SerializeField]
+    InputActionAsset inputActions;
     void OpenDefaultCraftingMenu()
     {
+        
         craftingGrid = defaultCraftingGrid;
         allRecipes = defaultRecipes;
         if(craftingGrid != null) craftingGrid.gameObject.SetActive(true);
@@ -119,6 +123,7 @@ public class Inventory : MonoBehaviour
         if(isOpeningInventory){
             OpenDefaultCraftingMenu();
             OpenInventory();
+            
         }
         else CloseInventory();
         // TODO: disable player turning.
@@ -130,7 +135,8 @@ public class Inventory : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         PlayerMovement.doRotation = true;
-       
+        inputActions.actionMaps[(int) actionMaps.PlayerMovement].Enable();
+        inputActions.actionMaps[(int) actionMaps.uiInput].Disable();
         if(craftingGrid != null) craftingGrid.gameObject.SetActive(false);
         closeInventory.Invoke();
     }
@@ -142,7 +148,8 @@ public class Inventory : MonoBehaviour
         Cursor.visible = true;
         PlayerMovement.doRotation = false;
         openInventory.Invoke();
-        
+        inputActions.actionMaps[(int) actionMaps.PlayerMovement].Disable();
+        inputActions.actionMaps[(int) actionMaps.uiInput].Enable();
         PopulateCraftingGrid();
     }
     /* void AddAxe(InputAction.CallbackContext callbackContext)
@@ -261,6 +268,7 @@ public class Inventory : MonoBehaviour
                 if(from.GetAmount() <= 0)
                 {
                     from.ClearSlot();
+                    HandleInventoryUpdate();
                 }
 
                 return;
@@ -275,6 +283,8 @@ public class Inventory : MonoBehaviour
             if(canSwap)
             {
                 SwapItems(from, to);
+                HandleInventoryUpdate();
+                
             }
 
             return;
@@ -285,6 +295,8 @@ public class Inventory : MonoBehaviour
         {
             to.SetItem(from.GetItem(), from.GetAmount());
             from.ClearSlot();
+            HandleInventoryUpdate();
+            
             return;
         }
         else
@@ -435,8 +447,11 @@ public class Inventory : MonoBehaviour
     {
         if(currentHandItem != null)
         {
+            Debug.LogWarning("Destroying!");
             Destroy(currentHandItem);
         }
+
+        GameManager.Instance.placer.CancelPlacement();
 
         ItemSlot equippedSlot = hotbarSlots[equippedHotbarIndex];
 
@@ -560,4 +575,11 @@ public class Inventory : MonoBehaviour
 
         return true;
     }
+}
+
+public enum actionMaps
+{
+    PlayerMovement,
+    uiInput,
+    General
 }
