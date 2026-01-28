@@ -43,8 +43,21 @@ public class Inventory : MonoBehaviour
     private GameObject currentHandItem;
     // Crafting
     public List<Recipe> allRecipes, defaultRecipes = new List<Recipe>();
-    public Transform craftingGrid;
+    public Transform craftingGrid, defaultCraftingGrid;
     public GameObject craftingButtonPrefab;
+
+    void OpenDefaultCraftingMenu()
+    {
+        craftingGrid = defaultCraftingGrid;
+        allRecipes = defaultRecipes;
+        if(craftingGrid != null) craftingGrid.gameObject.SetActive(true);
+    }
+
+    public void CloseOtherMenus()
+    {
+        if(craftingGrid != null) craftingGrid.gameObject.SetActive(false);
+
+    }
 
     private void Awake()
     {
@@ -97,7 +110,10 @@ public class Inventory : MonoBehaviour
     private void ToggleInventory(InputAction.CallbackContext callbackContext)
     {
         bool isOpeningInventory = !container.activeInHierarchy;
-        if(isOpeningInventory) OpenInventory();
+        if(isOpeningInventory){
+            OpenDefaultCraftingMenu();
+            OpenInventory();
+        }
         else CloseInventory();
         // TODO: disable player turning.
     }
@@ -108,6 +124,8 @@ public class Inventory : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         PlayerMovement.doRotation = true;
+       
+        if(craftingGrid != null) craftingGrid.gameObject.SetActive(false);
         closeInventory.Invoke();
     }
 

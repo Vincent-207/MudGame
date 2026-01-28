@@ -15,4 +15,7 @@ MonoBehaviour:
   health: 50
   toolType: 1
   toolLevelRequired: 1
-  droppedItem: {fileID: 5424399044159959150, guid: f15a9d0fa551df94b863fa88912d2911, type: 3}
+  itemDrop:
+    droppedItem: {fileID: 5424399044159959150, guid: f15a9d0fa551df94b863fa88912d2911, type: 3}
+    minDrop: 1
+    maxDrop: 4

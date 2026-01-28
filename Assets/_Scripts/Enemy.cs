@@ -11,12 +11,14 @@ public class Enemy : MonoBehaviour
     float moveSpeed, maxSpeed, turnSpeed;
     Rigidbody rb;
     // Attacking
+    [SerializeField]
     bool isAttacking = false;
+    [SerializeField]
     float minimumAttackDistance, attacktime;
     [SerializeField] AttackCollisionHandler attackCollisionHandler;
     // Animations
     [SerializeField] Animator animator;
-    String isAttackingParam;
+    String isAttackingParam = "IsAttacking";
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -40,13 +42,14 @@ public class Enemy : MonoBehaviour
 
     void DoHit()
     {
-        Debug.Log("Applying damage to player - TODO");
+        // Debug.Log("Applying damage to player - TODO");
     }
 
     bool CanAttack()
     {
         if(isAttacking) return false;
         float distanceToPlayer = (player.position - transform.position).magnitude;
+        Debug.Log("distance to player: " + distanceToPlayer);
         if(distanceToPlayer > minimumAttackDistance) return false;
         return true;
     }
@@ -59,8 +62,8 @@ public class Enemy : MonoBehaviour
 
         yield return new WaitForSeconds(attacktime);
 
-        animator.SetBool(isAttackingParam, isAttacking);
         isAttacking = false;
+        animator.SetBool(isAttackingParam, isAttacking);
     }
     void MoveAndTurnToPlayer()
     {

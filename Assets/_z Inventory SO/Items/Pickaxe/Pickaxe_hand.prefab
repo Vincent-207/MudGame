@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3285814620754398101}
   - component: {fileID: -3203979415226704595}
   - component: {fileID: 6888837608296200026}
+  - component: {fileID: 5714218959171420830}
   m_Layer: 7
   m_Name: Pickaxe_hand
   m_TagString: Untagged
@@ -105,11 +106,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   toolType: 1
-  isAttacking: 0
-  attack: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  attackDuration: 2
-  damage: 11
   toolLevel: 1
+  attackDuration: 0.6
+  damage: 11
+  attack: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  isAttacking: 0
 --- !u!65 &6888837608296200026
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -131,3 +132,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &5714218959171420830
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9121437940604962380}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 597b7e8c59c513a449578492e5b6f9b2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

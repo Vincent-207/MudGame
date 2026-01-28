@@ -28,9 +28,11 @@ public class ResourceNode : MonoBehaviour, IDamageable
 
     void ApplyDamage(float damage)
     {
+        Debug.Log("applying damage!");
         health -= damage;
         if(health <= 0)
         {
+            Debug.Log("applying damage 2!");  
             Die();
         }
     }
@@ -43,9 +45,15 @@ public class ResourceNode : MonoBehaviour, IDamageable
 
     void DropItems()
     {
+        Debug.Log("Starting drop");
         int dropAmount = Random.Range(damageable.itemDrop.minDrop, damageable.itemDrop.maxDrop);
+        if(damageable == null) Debug.Log("null damageable");
+        if(damageable.itemDrop == null) Debug.Log("null itemdrop");
+        if(damageable.itemDrop.droppedItem == null) Debug.Log("null dropped item");
         GameObject drop = Instantiate(damageable.itemDrop.droppedItem, transform.position, Quaternion.identity);
+        Debug.Log("made it");
         drop.GetComponent<Item>().amount = dropAmount;
+        Debug.Log("after");
         
     }
 }

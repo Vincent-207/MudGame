@@ -11,7 +11,7 @@ public class AttackCollisionHandler : MonoBehaviour
     String playerTag = "Player";
     public void HandleAttack(float attackLength)
     {
-        DoAttack(attackLength);
+        StartCoroutine(DoAttack(attackLength));
     }
 
     IEnumerator DoAttack(float length)
@@ -28,6 +28,12 @@ public class AttackCollisionHandler : MonoBehaviour
             hit.Invoke();
             // Prevent enemy from hitting the player multiple times in the same attack. 
             isAttacking = false;
+
+            PlayerHealth playerHealth = collider.GetComponentInChildren<PlayerHealth>();
+            if(playerHealth == null) return;
+            
+            playerHealth.DoDamage(10, ToolType.None, 0);
+            
         }
     }
 

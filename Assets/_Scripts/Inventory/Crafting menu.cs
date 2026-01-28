@@ -22,6 +22,7 @@ public class Craftingmenu : MonoBehaviour
     {
         inventory.craftingGrid = craftingGrid;
         inventory.allRecipes = menuRecipes;
+        inventory.CloseOtherMenus();
         inventory.PopulateCraftingGrid();
     }
 

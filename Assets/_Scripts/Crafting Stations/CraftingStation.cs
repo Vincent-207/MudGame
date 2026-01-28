@@ -14,7 +14,8 @@ public class CraftingStation : MonoBehaviour, IInteractable
     {
         Debug.Log("I'm a thing: " + name);
         stationMenu = Instantiate(stationMenuPrefab, GameManager.Instance.canvas.transform).GetComponent<CanvasGroup>();
-        if(stationMenu == null) Debug.LogWarning("I'm a bitch! " + name);
+        if(stationMenu == null) Debug.LogWarning("I'm evil  " + name);
+
         // Set default menu for when opened the first time, or else the inventory won't populate with recipes 
         stationMenu.transform.GetChild(1).GetComponent<Craftingmenu>().OpenMenu();
         inventory = GameManager.Instance.inventory;

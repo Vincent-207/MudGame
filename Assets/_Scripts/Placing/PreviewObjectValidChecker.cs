@@ -4,9 +4,9 @@ using UnityEngine;
 public class PreviewObjectValidChecker : MonoBehaviour
 {
     [SerializeField] private LayerMask invalidLayers;
-    public bool isValid {get; private set;} = false;
+    public bool isValid {get; private set;} = true;
     private HashSet<Collider> collidingObjects = new HashSet<Collider>();
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if(((1 << other.gameObject.layer) & invalidLayers) != 0)

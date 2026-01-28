@@ -42,11 +42,11 @@ public class Tool : MonoBehaviour
     {
         attack.action.started -= StartAttack;
     }
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerStay(Collider collider)
     {
         if (isAttacking)
         {
-            Debug.Log("Weapon entered: " + collider.name);
+            // Debug.Log("Weapon entered: " + collider.name);
             IDamageable damageable = collider.GetComponent<IDamageable>();
             if(damageable == null || attackedDuringSwing.Contains(damageable)) return;
             damageable.DoDamage(damage, toolType, toolLevel);

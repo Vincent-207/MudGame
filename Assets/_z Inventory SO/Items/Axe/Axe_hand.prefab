@@ -106,11 +106,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   toolType: 2
-  isAttacking: 0
-  attack: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  attackDuration: 2
-  damage: 11
   toolLevel: 1
+  attackDuration: 0.6
+  damage: 11
+  attack: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  isAttacking: 0
 --- !u!65 &6888837608296200026
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -142,7 +142,7 @@ Animator:
   m_GameObject: {fileID: 9121437940604962380}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e373def3dce19a94f97366b88f62719f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 597b7e8c59c513a449578492e5b6f9b2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

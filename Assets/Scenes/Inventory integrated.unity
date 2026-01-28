@@ -1299,6 +1299,9 @@ MonoBehaviour:
   raycastDistance: 1000
   _inPlacement: 0
   _validPreviewState: 0
+  PlacedObject:
+    m_PersistentCalls:
+      m_Calls: []
   placeInput: {fileID: 7038908742630531558, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1001 &157561231
 PrefabInstance:
@@ -3233,7 +3236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &768542544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3250,6 +3253,11 @@ MonoBehaviour:
   moveSpeed: 50
   maxSpeed: 10
   turnSpeed: 10
+  isAttacking: 0
+  minimumAttackDistance: 0
+  attacktime: 0
+  attackCollisionHandler: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!136 &768542545
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5582,8 +5590,10 @@ MonoBehaviour:
   hand: {fileID: 746007836}
   allRecipes:
   - {fileID: 11400000, guid: f84864992b004e44f969b6b5ee149802, type: 2}
-  defaultRecipes: []
+  defaultRecipes:
+  - {fileID: 11400000, guid: f84864992b004e44f969b6b5ee149802, type: 2}
   craftingGrid: {fileID: 1207511836}
+  defaultCraftingGrid: {fileID: 1207511836}
   craftingButtonPrefab: {fileID: 3373918922311450212, guid: 56e31e8f90f9ac044b5a2c3206c46686, type: 3}
 --- !u!1 &1454796696
 GameObject:

@@ -8,6 +8,7 @@ public class Ingredient
     public ItemSO item;
     public int amount;
 }
+[Serializable]
 [CreateAssetMenu(fileName = "Recipe", menuName = "Scriptable Objects/ New Recipe")]
 public class Recipe : ScriptableObject
 {
