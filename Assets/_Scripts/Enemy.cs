@@ -76,13 +76,24 @@ public class Enemy : MonoBehaviour
         rb.AddForce(toPlayer * moveSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
         Debug.DrawRay(transform.position, toPlayer * moveSpeed * Time.fixedDeltaTime);
 
-        // Turn towards player
+        TurnToPlayer();
+        /* // Turn towards player
         float rot_z = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg;
         // Quaternion toPlayerRot = Quaternion.Euler(0f, 0f, rot_z - 90);
         Quaternion lookAtRot = Quaternion.LookRotation(toPlayer, Vector3.up);
         Quaternion toPlayerRot =  Quaternion.Euler(0f, lookAtRot.y, 0f);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, toPlayerRot, turnSpeed * Time.fixedDeltaTime);
+        
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, toPlayerRot, turnSpeed * Time.fixedDeltaTime); */
     }
 
+    void TurnToPlayer()
+    {
+        Vector3 toPlayer = player.position - transform.position;
+        toPlayer.y = 0;
+        toPlayer.Normalize();
+        Quaternion lookAtPlayerRot = Quaternion.LookRotation(toPlayer, Vector3.up);
+        transform.rotation = lookAtPlayerRot;
+        // transform.rotation = Quaternion.RotateTowards(transform.rotation, lookAtPlayerRot, turnSpeed * Time.fixedDeltaTime);
+    }
 
 }

@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour {
 
     // Updated input system
     [SerializeField]
-    InputActionReference move, crouch, jump, look, debugJump;
+    InputActionReference move, crouch, jump, look;
 
     void Awake() {
         rb = GetComponent<Rigidbody>();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class Craftingmenu : MonoBehaviour
@@ -8,7 +9,8 @@ public class Craftingmenu : MonoBehaviour
     public Transform craftingGrid;
     [SerializeField] Inventory inventory;
     bool menuIsOpen = false;
-
+    public int index;
+    public UnityEvent menuOpened;
     void Awake()
     {
         inventory = GameManager.Instance.inventory;
@@ -20,9 +22,10 @@ public class Craftingmenu : MonoBehaviour
     }
     public void OpenMenu()
     {
-        inventory.craftingGrid = craftingGrid;
-        inventory.allRecipes = menuRecipes;
         inventory.CloseOtherMenus();
+        inventory.craftingGrid = craftingGrid;
+        craftingGrid.gameObject.SetActive(true);
+        inventory.allRecipes = menuRecipes;
         inventory.PopulateCraftingGrid();
     }
 

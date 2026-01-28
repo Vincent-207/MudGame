@@ -59,6 +59,12 @@ public class Inventory : MonoBehaviour
 
     }
 
+
+    void HandleInventoryUpdate()
+    {
+        PopulateCraftingGrid();
+        SelectHotBarItem(equippedHotbarIndex);
+    }
     private void Awake()
     {
         allRecipes = defaultRecipes;
@@ -136,6 +142,8 @@ public class Inventory : MonoBehaviour
         Cursor.visible = true;
         PlayerMovement.doRotation = false;
         openInventory.Invoke();
+        
+        PopulateCraftingGrid();
     }
     /* void AddAxe(InputAction.CallbackContext callbackContext)
     {
@@ -386,13 +394,16 @@ public class Inventory : MonoBehaviour
             }
         }
     }
-
-    private void SelectHotBarItem(InputAction.CallbackContext callbackContext)
+    private void SelectHotBarItem(int hotbarIndex)
     {
-        
-        equippedHotbarIndex = (int) callbackContext.action.ReadValue<float>() - 1;
+        equippedHotbarIndex = hotbarIndex;
         UpdateHotbarOpacity();
         EquipHandItem();
+    }
+    private void SelectHotBarItem(InputAction.CallbackContext callbackContext)
+    {
+        equippedHotbarIndex = (int) callbackContext.action.ReadValue<float>() - 1;
+        SelectHotBarItem(equippedHotbarIndex);
         
 
     }
@@ -433,8 +444,8 @@ public class Inventory : MonoBehaviour
 
         ItemSO item = equippedSlot.GetItem();
         if(item.handItemPrefab == null) return;
-        Debug.Log("CHecking if placeable");
-        Debug.Log(String.Format("Tag: {0}", item.slotTag));
+        // Debug.Log("CHecking if placeable");
+        // Debug.Log(String.Format("Tag: {0}", item.slotTag));
         if(item.slotTag == SlotTag.Placeable)
         {
             Debug.Log("Placeable");
@@ -452,6 +463,7 @@ public class Inventory : MonoBehaviour
 
     public void PopulateCraftingGrid()
     {
+        Debug.Log("Populating crafts!");
         for(int i = craftingGrid.childCount - 1; i >= 0; i--)
         {
             Destroy(craftingGrid.GetChild(i).gameObject);

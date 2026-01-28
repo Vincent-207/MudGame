@@ -239,6 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Craftingmenu
   menuRecipes:
   - {fileID: 11400000, guid: 6860dc34358da7443859b079b0e187b3, type: 2}
+  - {fileID: 11400000, guid: f8c2538803aafaa48950e8762f44a3e5, type: 2}
   craftingGrid: {fileID: 3267059249117028373}
   inventory: {fileID: 0}
 --- !u!1 &2906543454380924104

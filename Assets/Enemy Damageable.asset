@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Damageable
   health: 100
   toolType: 0
-  toolLevelRequired: 1
-  droppedItem: {fileID: 6335586854029700286, guid: 9b0ff815483763849b42fd84e8a8511f, type: 3}
+  toolLevelRequired: 0
+  itemDrop:
+    droppedItem: {fileID: 6335586854029700286, guid: 9b0ff815483763849b42fd84e8a8511f, type: 3}
+    minDrop: 5
+    maxDrop: 10
