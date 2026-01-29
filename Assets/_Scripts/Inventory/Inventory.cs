@@ -138,6 +138,7 @@ public class Inventory : MonoBehaviour
         inputActions.actionMaps[(int) actionMaps.PlayerMovement].Enable();
         inputActions.actionMaps[(int) actionMaps.uiInput].Disable();
         if(craftingGrid != null) craftingGrid.gameObject.SetActive(false);
+        EndDrag();
         closeInventory.Invoke();
     }
 
@@ -229,6 +230,10 @@ public class Inventory : MonoBehaviour
     }
     private void EndDrag(InputAction.CallbackContext callbackContext)
     {
+        EndDrag();
+    }
+    private void EndDrag()
+    {
         if(isDragging)
         {
             ItemSlot hovered = GetHoveredSlot();
@@ -240,6 +245,14 @@ public class Inventory : MonoBehaviour
                 draggedSlot = null;
                 isDragging = false;
                 
+            }
+            else
+            {
+                // place back at slot. 
+                HandleDrop(draggedSlot, draggedSlot);
+                dragIcon.enabled = false;
+                draggedSlot = null;
+                isDragging = false;
             }
         }
     }
