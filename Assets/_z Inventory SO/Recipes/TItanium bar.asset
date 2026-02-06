@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb35c44503fd1974f955ee33193d3ba1, type: 3}
-  m_Name: Iron Ingot
+  m_Name: TItanium bar
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   ingredients:
-  - item: {fileID: 11400000, guid: b9a0258b72ef30e44aad12c2d9b7abba, type: 2}
+  - item: {fileID: 11400000, guid: 49ef719771d607b408337362a3fceb38, type: 2}
     amount: 1
-  result: {fileID: 11400000, guid: 38af31eb9c557b94dbc331e23f7fd4d3, type: 2}
+  result: {fileID: 11400000, guid: 3a331920fb6127247998132ab448b92f, type: 2}
   resultAmount: 1

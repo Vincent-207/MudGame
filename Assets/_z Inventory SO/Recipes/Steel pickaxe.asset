@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb35c44503fd1974f955ee33193d3ba1, type: 3}
-  m_Name: Axe
+  m_Name: Steel pickaxe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   ingredients:
+  - item: {fileID: 11400000, guid: 38af31eb9c557b94dbc331e23f7fd4d3, type: 2}
+    amount: 3
   - item: {fileID: 11400000, guid: a346f81e1b4dabb459c588a19ef01c0a, type: 2}
-    amount: 5
-  result: {fileID: 11400000, guid: 5f8685c4567576c4b9a0dc3869cd6319, type: 2}
+    amount: 2
+  result: {fileID: 11400000, guid: a9720ddb27e9a064e9166feba8976710, type: 2}
   resultAmount: 1

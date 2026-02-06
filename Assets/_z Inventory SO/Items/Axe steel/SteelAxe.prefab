@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2687890708704353017}
   - component: {fileID: 8061380977807473688}
   m_Layer: 7
-  m_Name: Axe
+  m_Name: SteelAxe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 57f6e239244d71146ac71714fc413758, type: 2}
+  - {fileID: 2100000, guid: 5ce6d2ed60f7231468f754ed28e76de7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

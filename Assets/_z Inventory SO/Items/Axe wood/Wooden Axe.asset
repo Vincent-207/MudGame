@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d52e61a707f8c3f4e8f2733ab326ca07, type: 3}
+  m_Name: Wooden Axe
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSO
+  itemName: Wooden Axe
+  slotTag: 0
+  Icon: {fileID: 21300000, guid: 61d13338202bf034ba8b4015cba2e0a2, type: 3}
+  maxStackSize: 1
+  itemPrefab: {fileID: 6068213369574324245, guid: de94aa7e3b0526a4c88b1b1bd32c41ab, type: 3}
+  handItemPrefab: {fileID: 9121437940604962380, guid: 3996a10a6cf4b304fb521c3c4f9f0743, type: 3}

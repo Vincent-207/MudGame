@@ -50,10 +50,15 @@ public class ObjectPlacer : MonoBehaviour
     }
     private void PlaceObject(InputAction.CallbackContext callbackContext)
     {
-        if(!_inPlacement || !_validPreviewState) return;
+        
+        if(!_inPlacement || !_validPreviewState) 
+        {
+            return;
+        }
+        
         Quaternion rotation = Quaternion.Euler(0f, playerCam.transform.eulerAngles.y, 0f);
-        Instantiate(placeableObjectPrefab, _currentPlacementPosition, rotation, transform);
 
+        Instantiate(placeableObjectPrefab, _currentPlacementPosition, rotation, transform);
         ExitPlacementMode();
     }
     private void SetValidPreviewState()

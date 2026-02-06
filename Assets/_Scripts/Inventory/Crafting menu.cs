@@ -10,7 +10,7 @@ public class Craftingmenu : MonoBehaviour
     [SerializeField] Inventory inventory;
     bool menuIsOpen = false;
     public int index;
-    public UnityEvent menuOpened;
+    public UnityEvent menuOpened = new UnityEvent();
     void Awake()
     {
         inventory = GameManager.Instance.inventory;
@@ -22,6 +22,7 @@ public class Craftingmenu : MonoBehaviour
     }
     public void OpenMenu()
     {
+        Awake();
         inventory.CloseOtherMenus();
         inventory.craftingGrid = craftingGrid;
         craftingGrid.gameObject.SetActive(true);

@@ -21,9 +21,9 @@ public class CraftingStation : MonoBehaviour, IInteractable
         craftingMenus.AddRange(stationMenu.GetComponentsInChildren<Craftingmenu>());
 
         // Set default menu for when opened the first time, or else the inventory won't populate with recipes 
+        inventory = GameManager.Instance.inventory;
         AddListeners();
         OpenCraftingMenu(0);
-        inventory = GameManager.Instance.inventory;
         CloseStation();
         inventory.closeInventory.AddListener(CloseStation);
     }

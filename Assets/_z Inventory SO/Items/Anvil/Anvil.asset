@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d52e61a707f8c3f4e8f2733ab326ca07, type: 3}
+  m_Name: Anvil
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSO
+  itemName: Anvil
+  slotTag: 7
+  Icon: {fileID: 21300000, guid: 31bad61e072f852459cfdf6b2f114712, type: 3}
+  maxStackSize: 1
+  itemPrefab: {fileID: 0}
+  handItemPrefab: {fileID: 7236992829963614051, guid: 1724e9be480542a4b8db457357b105aa, type: 3}

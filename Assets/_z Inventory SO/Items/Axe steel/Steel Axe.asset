@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d52e61a707f8c3f4e8f2733ab326ca07, type: 3}
-  m_Name: Axe
+  m_Name: Steel Axe
   m_EditorClassIdentifier: Assembly-CSharp::ItemSO
-  itemName: Axe
-  Icon: {fileID: 21300000, guid: 1196181641dd02444837c29ec257c1bc, type: 3}
+  itemName: Steel Axe
+  slotTag: 0
+  Icon: {fileID: 21300000, guid: 9dd71ced2113fab4893b31195d6ca1dd, type: 3}
   maxStackSize: 1
-  itemPrefab: {fileID: 6068213369574324245, guid: de94aa7e3b0526a4c88b1b1bd32c41ab, type: 3}
-  handItemPrefab: {fileID: 9121437940604962380, guid: 3996a10a6cf4b304fb521c3c4f9f0743, type: 3}
+  itemPrefab: {fileID: 6068213369574324245, guid: 0d18b46bc0278cf4ca123b7e24b9ea19, type: 3}
+  handItemPrefab: {fileID: 9121437940604962380, guid: 4841d807c1130404dbdd076cbf4d6f54, type: 3}
