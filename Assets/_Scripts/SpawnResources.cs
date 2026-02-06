@@ -42,7 +42,7 @@ public class SpawnResources : MonoBehaviour
         {
             for(int x = 0; x <= xSize; x++)
             {   
-                float perlinValue = yScale * Mathf.PerlinNoise(x * spawnScale , z * spawnScale);
+                float perlinValue = yScale * Mathf.PerlinNoise(x * xScale , z * xScale);
                 if(spawnThreshold >= perlinValue)
                 {
                     float chance = Random.Range(0f, 1f);
@@ -55,7 +55,7 @@ public class SpawnResources : MonoBehaviour
 
     void CreateNode(int x, int z)
     {
-        Vector3 spawnPos = new Vector3(x * xScale,0, z * xScale);
+        Vector3 spawnPos = new Vector3(x * spawnScale,0, z * spawnScale);
         Instantiate(resourcePrefab, spawnPos, Quaternion.identity, resourceHolder.transform);
 
     }

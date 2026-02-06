@@ -169,8 +169,8 @@ MonoBehaviour:
   zSize: 200
   xScale: 0.1
   yScale: 1
-  spawnScale: 2
-  spawnThreshold: 0.2
+  spawnScale: 3
+  spawnThreshold: 0.15
   spawnChance: 0.5
   Regen: 0
 --- !u!1 &364718523
