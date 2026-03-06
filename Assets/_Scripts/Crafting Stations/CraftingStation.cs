@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor.AnimatedValues;
 using UnityEngine;
 
 public class CraftingStation : MonoBehaviour, IInteractable

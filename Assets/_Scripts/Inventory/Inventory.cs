@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEditor;
-using System.ComponentModel;
-using System.Buffers.Text;
-using UnityEngine.AI;
 using UnityEngine.Events;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
-using UnityEditor.PackageManager;
 
 public class Inventory : MonoBehaviour
 {   
