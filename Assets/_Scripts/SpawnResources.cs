@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class SpawnResources : MonoBehaviour
@@ -7,6 +8,8 @@ public class SpawnResources : MonoBehaviour
     public int xSize, zSize;
     public float xScale, yScale, spawnScale, spawnThreshold, spawnChance;
     public bool Regen = false;
+    public GameObject[] spawnTypes;
+    public int seed, regionSize = 10;
     void Start()
     {
         GenerateNodes();
@@ -55,8 +58,30 @@ public class SpawnResources : MonoBehaviour
 
     void CreateNode(int x, int z)
     {
-        Vector3 spawnPos = new Vector3(x * spawnScale,0, z * spawnScale);
-        Instantiate(resourcePrefab, spawnPos, Quaternion.identity, resourceHolder.transform);
+        RaycastHit hit;
+        float ySpawnPos = 0;
+        Vector3 offset = Random.insideUnitCircle;
+        offset.z = offset.y; offset.y = 0;
+        if(Physics.Raycast(new Vector3(x * spawnScale, 100, z * spawnScale) + offset, Vector3.down, out hit))
+        {
+            ySpawnPos = hit.point.y;
+        }
+        
+        Vector3 spawnPos = new Vector3(x * spawnScale, ySpawnPos, z * spawnScale) + offset;
+        
+        Instantiate(spawnTypes[Random.Range(0, spawnTypes.Length)], spawnPos, Quaternion.identity, resourceHolder.transform);
+
+        int region = x/regionSize + z/regionSize;
+        Random.InitState(region + seed);
+
+
+        // convert chance to material. 
+        // meshRenderer.material = spawnTypes[Random.Range(0, spawnTypes.Length)];
+        
 
     }
+
+    
+
+    
 }

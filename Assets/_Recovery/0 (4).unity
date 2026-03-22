@@ -306,10 +306,9 @@ MonoBehaviour:
   spawnChance: 0.5
   Regen: 1
   spawnTypes:
-  - {fileID: 1726809550327728526, guid: b0dad48d11648a448a0fdbda7a6b206e, type: 3}
-  - {fileID: 4740406433886127487, guid: d2ffc9c5d33fddc41aaa1d39af67076a, type: 3}
-  - {fileID: 545208601101523924, guid: e0476cab416e6084bbeaf4f394bbe83f, type: 3}
-  - {fileID: 7154879350614004901, guid: 332f24103f15e25418e8629b40864955, type: 3}
+  - {fileID: 2100000, guid: 763c28dfa833a0e438be07574d11089f, type: 2}
+  - {fileID: 2100000, guid: 0e6a3e57e4a1c0246bc22c34714879a0, type: 2}
+  - {fileID: 2100000, guid: 94c2dea5bebb06742b5d802842bd6f05, type: 2}
   seed: 0
   regionSize: 10
 --- !u!1 &364160780
@@ -467,7 +466,7 @@ Transform:
   m_GameObject: {fileID: 364718523}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 76.35827, y: -194, z: -42.97163}
+  m_LocalPosition: {x: 76.35827, y: 0, z: -42.97163}
   m_LocalScale: {x: 100, y: 1, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []

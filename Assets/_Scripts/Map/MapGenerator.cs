@@ -2,10 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshCollider))]
 public class MapGenerator : MonoBehaviour
 {
     public int xSize, zSize;
     public float xScale, yScale;
+    public Vector2 offset;
     int[] triangles;
     Vector3[] verticies;
     public bool Regen;
@@ -21,6 +25,15 @@ public class MapGenerator : MonoBehaviour
             Regen = false;
         }
     }
+
+    public void Init(Vector2Int size, Vector2 scale, Vector2 offset)
+    {
+        xSize = size.x;
+        zSize = size.y;
+        xScale = scale.x;
+        yScale = scale.y;
+        this.offset = offset;
+    }
     void GenerateMap()
     {
         verticies = new Vector3[(xSize + 1) * (zSize + 1)];
@@ -28,8 +41,8 @@ public class MapGenerator : MonoBehaviour
         {
             for(int x = 0; x <= xSize; x++)
             {   
-                float y = yScale * Mathf.PerlinNoise(x * xScale , z * xScale);
-                verticies[i] = (new Vector3(x, y, z));
+                float y = yScale * Mathf.PerlinNoise((offset.x + x) * xScale, (offset.y + z) * xScale);
+                verticies[i] = new Vector3(x, y, z);
                 i++;            
             }
             
@@ -62,6 +75,7 @@ public class MapGenerator : MonoBehaviour
         mesh.vertices = verticies;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+        mesh.name = "Map Mesh";
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 }
