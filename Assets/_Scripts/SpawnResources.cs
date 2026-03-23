@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpawnResources : MonoBehaviour
@@ -58,18 +59,21 @@ public class SpawnResources : MonoBehaviour
 
     void CreateNode(int x, int z)
     {
+        GameObject prefabToSpawn =  spawnTypes[Random.Range(0, spawnTypes.Length)];
+        float meshHeight = prefabToSpawn.GetComponent<MeshFilter>().sharedMesh.bounds.size.y;
+
         RaycastHit hit;
-        float ySpawnPos = 0;
+        float ySpawnPos = 0f;
         Vector3 offset = Random.insideUnitCircle;
         offset.z = offset.y; offset.y = 0;
+
         if(Physics.Raycast(new Vector3(x * spawnScale, 100, z * spawnScale) + offset, Vector3.down, out hit))
         {
             ySpawnPos = hit.point.y;
         }
-        
-        Vector3 spawnPos = new Vector3(x * spawnScale, ySpawnPos, z * spawnScale) + offset;
-        
-        Instantiate(spawnTypes[Random.Range(0, spawnTypes.Length)], spawnPos, Quaternion.identity, resourceHolder.transform);
+        ySpawnPos += meshHeight * 0.5f;
+        Vector3 spawnPos = new Vector3(x * spawnScale, ySpawnPos, z * spawnScale) + offset * 2;
+        Instantiate(prefabToSpawn, spawnPos, Quaternion.identity, resourceHolder.transform);
 
         int region = x/regionSize + z/regionSize;
         Random.InitState(region + seed);

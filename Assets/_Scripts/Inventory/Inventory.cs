@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 public class Inventory : MonoBehaviour
 {   
@@ -134,6 +135,7 @@ public class Inventory : MonoBehaviour
         if(craftingGrid != null) craftingGrid.gameObject.SetActive(false);
         EndDrag();
         closeInventory.Invoke();
+        equipmentSlotParent.SetActive(false);
     }
 
     public void OpenInventory()
@@ -146,6 +148,7 @@ public class Inventory : MonoBehaviour
         inputActions.actionMaps[(int) actionMaps.PlayerMovement].Disable();
         inputActions.actionMaps[(int) actionMaps.uiInput].Enable();
         PopulateCraftingGrid();
+        equipmentSlotParent.SetActive(true);
     }
     /* void AddAxe(InputAction.CallbackContext callbackContext)
     {
@@ -497,8 +500,11 @@ public class Inventory : MonoBehaviour
             Image img = btnObj.transform.GetChild(0).GetComponent<Image>();
             img.sprite = recipe.result.Icon;
 
-            Button btn = btnObj.GetComponent<Button>();
+            RecipeDisplayer recipeDisplay = btnObj.GetComponent<RecipeDisplayer>();
+            recipeDisplay.recipe = recipe;
 
+            Button btn = btnObj.GetComponent<Button>();
+            Debug.Log("Can craft " + recipe.name +": " + CanCraft(recipe));
             btn.interactable = CanCraft(recipe);
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => Craft(recipe));

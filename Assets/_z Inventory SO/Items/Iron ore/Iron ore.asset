@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: Iron Ore
   slotTag: 6
   Icon: {fileID: 21300000, guid: bb996dd028d434540bc5df5a3781d5c2, type: 3}
-  maxStackSize: 1
+  maxStackSize: 20
   itemPrefab: {fileID: 5424399044159959150, guid: 13860364de8eef74bbb73e6e61647b5a, type: 3}
   handItemPrefab: {fileID: 5103962106775782353, guid: fb6e5516f5b0a32409ec157bc684b41f, type: 3}

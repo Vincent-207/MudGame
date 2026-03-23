@@ -7,7 +7,7 @@ public class WholeMapGen : MonoBehaviour
     public Vector2 scale;
     public int mapWidth;
     public Material groundMat;
-
+    
     void Start()
     {
         for(int x = 1; x <= mapWidth; x++)
@@ -27,5 +27,8 @@ public class WholeMapGen : MonoBehaviour
         MapGenerator chunkMapGen = chunk.AddComponent<MapGenerator>();
         chunkMapGen.Init(size, scale, new Vector2Int(gridPos.x * size.x, gridPos.y * size.y));
         chunk.GetComponent<MeshRenderer>().material = groundMat;
+
+        chunk.layer = gameObject.layer;
+        chunk.tag = gameObject.tag;
     }
 }

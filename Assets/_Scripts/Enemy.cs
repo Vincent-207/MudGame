@@ -22,13 +22,15 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         attackCollisionHandler.hit.AddListener(DoHit);
-        
+        player = FindAnyObjectByType<PlayerMovement>().transform;
     }
     void FixedUpdate()
     {
         MoveAndTurnToPlayer();
         HandleAttacking();
     }
+
+    
 
     void HandleAttacking()
     {
