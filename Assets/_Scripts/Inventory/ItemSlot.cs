@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public bool hovering;
+    [SerializeField]
     private ItemSO heldItem;
     private int itemAmount;
     private Image iconImage;

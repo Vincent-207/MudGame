@@ -36,7 +36,7 @@ public class Manual : MonoBehaviour
         UpdateDisplay();
     }
 
-    void LoadPrevious()
+    public void LoadPrevious()
     {
         currentEntry--;
         if(currentEntry < 0)
@@ -48,7 +48,7 @@ public class Manual : MonoBehaviour
 
     }
 
-    void UpdateDisplay()
+    public void UpdateDisplay()
     {
         image.sprite = images[currentEntry];
         textBox.text = texts[currentEntry];

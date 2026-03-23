@@ -459,7 +459,7 @@ public class Inventory : MonoBehaviour
     {
         if(currentHandItem != null)
         {
-            Debug.LogWarning("Destroying!");
+            // Debug.LogWarning("Destroying!");
             Destroy(currentHandItem);
         }
 
@@ -475,7 +475,7 @@ public class Inventory : MonoBehaviour
         // Debug.Log(String.Format("Tag: {0}", item.slotTag));
         if(item.slotTag == SlotTag.Placeable)
         {
-            Debug.Log("Placeable");
+            // Debug.Log("Placeable");
             PlaceableObject placeableObject = item.handItemPrefab.GetComponent<Placeable>().placeableObject;
             GameManager.Instance.placer.LoadObject(placeableObject.placeablePrefab, placeableObject.previewPrefab);
             GameManager.Instance.placer.PlacedObject.AddListener(() => RemoveItem(item, 1));
@@ -490,7 +490,7 @@ public class Inventory : MonoBehaviour
 
     public void PopulateCraftingGrid()
     {
-        Debug.Log("Populating crafts!");
+        // Debug.Log("Populating crafts!");
         for(int i = craftingGrid.childCount - 1; i >= 0; i--)
         {
             Destroy(craftingGrid.GetChild(i).gameObject);
@@ -506,7 +506,7 @@ public class Inventory : MonoBehaviour
             recipeDisplay.recipe = recipe;
 
             Button btn = btnObj.GetComponent<Button>();
-            Debug.Log("Can craft " + recipe.name +": " + CanCraft(recipe));
+            // Debug.Log("Can craft " + recipe.name +": " + CanCraft(recipe));
             btn.interactable = CanCraft(recipe);
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => Craft(recipe));

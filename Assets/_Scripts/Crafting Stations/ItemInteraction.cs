@@ -24,8 +24,8 @@ public class ItemInteraction : MonoBehaviour
         DrawDebug();
         if(Physics.Raycast(ray, out hit, itemPickupRange, interactableLayerMask))
         {
-            Debug.Log("hit!");
-            Debug.Log("Hit: " + hit.collider.name);
+            // Debug.Log("hit!");
+            // Debug.Log("Hit: " + hit.collider.name);
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
             if(interactable == null) return;
             interactable.Interact(hit.distance);
@@ -34,7 +34,7 @@ public class ItemInteraction : MonoBehaviour
 
     void DrawDebug()
     {
-        Debug.Log("Interacting!");
+        // Debug.Log("Interacting!");
         Debug.DrawRay(transform.position, playerCam.transform.forward * 5f, Color.red);
     }
 }

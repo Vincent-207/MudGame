@@ -125,7 +125,7 @@ public class ObjectPlacer : MonoBehaviour
     {
         PlacedObject.RemoveAllListeners();
 
-        Debug.Log("loading!");
+       // Debug.Log("loading!");
         this.placeableObjectPrefab = placeableObjectPrefab;
         this.previewObjectPrefab = previewObjectPrefab;
         

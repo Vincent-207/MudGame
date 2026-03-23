@@ -28,10 +28,9 @@ public class CookingStation : MonoBehaviour, IInteractable
         cookingMenu = Instantiate(cookingMenuPrefab, GameManager.Instance.inventory.transform);
         // Ensure other ui elements don't get hidden under.
         cookingMenu.transform.SetAsFirstSibling();
-        fuelSlotHolder = cookingMenu.transform.GetChild(1);
-        ingrediantSlotHolder = cookingMenu.transform.GetChild(2);
-        outputSlotHolder = cookingMenu.transform.GetChild(3);
-
+        fuelSlotHolder = getChildByName(cookingMenu.transform, "Fuel");
+        ingrediantSlotHolder = getChildByName(cookingMenu.transform, "Ingredient");
+        outputSlotHolder = getChildByName(cookingMenu.transform, "Output");
         fuelSlots.AddRange(fuelSlotHolder.GetComponentsInChildren<ItemSlot>());
         ingrediantSlots.AddRange(ingrediantSlotHolder.GetComponentsInChildren<ItemSlot>());
         outputSlots.AddRange(outputSlotHolder.GetComponentsInChildren<ItemSlot>());
@@ -42,6 +41,19 @@ public class CookingStation : MonoBehaviour, IInteractable
 
 
         MenuCanvasGroup = cookingMenu.GetComponent<CanvasGroup>();
+    }
+
+    Transform getChildByName(Transform parent, string name)
+    {
+        for(int i = 0; i < parent.childCount; i++)
+        {
+            if(parent.GetChild(i).name == name)
+            {
+                return parent.GetChild(i);
+            }
+        }
+
+        return null;
     }
 
     void Start()
@@ -161,16 +173,16 @@ public class CookingStation : MonoBehaviour, IInteractable
 
     bool CanUseFuel()
     {
-        // Debug.LogWarning("Checking");
+        Debug.LogWarning("Checking");
         if(currentFuelTime > 0) return false;
-        // Debug.Log("No active fuel");
+        Debug.Log("No active fuel");
         if(IsEmptyCollection(fuelSlots)) return false;
-        // Debug.Log("Is empty collection");
+        Debug.Log("Is not empty collection");
         Recipe recipeToCraft = GetCraftableRecipe();
         if(recipeToCraft == null) return false;
-        // Debug.Log("Recipe found");
+        Debug.Log("Recipe found");
         if(OutputCanFit(recipeToCraft)) return true;
-        // Debug.Log("Output can't fit");
+        Debug.Log("Output can't fit");
 
         return true;
 
@@ -230,8 +242,10 @@ public class CookingStation : MonoBehaviour, IInteractable
     }
     bool IsEmptyCollection(List<ItemSlot> collection)
     {
+        Debug.Log("Checking collection length: " + collection.Count);
         foreach(ItemSlot slot in collection)
         {
+            Debug.Log("Slot " + slot.gameObject.name + ": has item - " + slot.HasItem());
             if(slot.HasItem()) return false;
         }
 
