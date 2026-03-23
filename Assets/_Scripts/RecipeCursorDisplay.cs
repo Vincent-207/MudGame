@@ -34,6 +34,8 @@ public class RecipeCursorDisplay : MonoBehaviour
             display.GetComponent<Image>().sprite = ingredient.item.Icon;
             display.GetComponentInChildren<TMP_Text>().text = "x" + ingredient.amount;
         }
+
+        transform.SetAsLastSibling();
     }
 
     public void Hide()

@@ -136,6 +136,8 @@ public class Inventory : MonoBehaviour
         EndDrag();
         closeInventory.Invoke();
         equipmentSlotParent.SetActive(false);
+
+        RecipeCursorDisplay.instance.Hide();
     }
 
     public void OpenInventory()

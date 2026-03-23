@@ -532,6 +532,7 @@ MonoBehaviour:
   menuRecipes:
   - {fileID: 11400000, guid: f84864992b004e44f969b6b5ee149802, type: 2}
   - {fileID: 11400000, guid: 55cb3f70dcf6e7c4483159a16b12f924, type: 2}
+  - {fileID: 11400000, guid: 24742f625850f7d4fa45de913ca35334, type: 2}
   craftingGrid: {fileID: 3267059249117028373}
   inventory: {fileID: 0}
   index: 0
