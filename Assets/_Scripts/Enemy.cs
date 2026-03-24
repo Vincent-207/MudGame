@@ -62,9 +62,10 @@ public class Enemy : MonoBehaviour
         animator.SetBool(isAttackingParam, isAttacking);
 
         yield return new WaitForSeconds(attacktime);
-
         isAttacking = false;
         animator.SetBool(isAttackingParam, isAttacking);
+
+        yield return new WaitForSeconds(attacktime); //cooldown
     }
     void MoveAndTurnToPlayer()
     {

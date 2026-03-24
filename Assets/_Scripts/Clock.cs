@@ -8,25 +8,28 @@ public class Clock : MonoBehaviour
     float time;
 
     bool nightTriggered = false;
-    int day = 1;
+    public int day = 1;
+    public
+    int nightTimeStart, nightTimeEnd;
     void Start()
     {
         display = GetComponent<TMP_Text>();
-        dayDisplay = GetComponentInChildren<TMP_Text>();
+        dayDisplay = transform.GetChild(0).GetComponent<TMP_Text>();
 
     }
     void Update()
     {
         time += Time.deltaTime;
 
-        if(time > 600 && !nightTriggered)
+        if(time > nightTimeStart && !nightTriggered)
         {
             OnNight();
         }
 
-        if(time > 725)
+        if(time > nightTimeEnd)
         {
             nightTriggered = false;
+            day++;
             time = 0;
         }
 
@@ -38,13 +41,12 @@ public class Clock : MonoBehaviour
         int minutes = (int) time / 60;
         int seconds = (int) time - minutes * 60;
         display.text = minutes.ToString("D2") + ":" + seconds.ToString("D2");
-
+        dayDisplay.text = "Day " + day;
     }
     
     void OnNight()
     {
         nightTriggered = true;
         FindFirstObjectByType<CreatureSpawning>().DoSpawn(day);
-        day++;
     }
 }
